@@ -11,34 +11,39 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# --- NEW: AUTO-LOAD PDF FOLDER ---
+# --- FOLDER CONFIGURATION ---
 KNOWLEDGE_BASE_DIR = "knowledge_base"
-global_pdf_context = ""
+# This variable will hold all the text from your PDFs
+static_pdf_context = ""
 
-def load_static_pdfs():
-    global global_pdf_context
+def load_all_pdfs():
+    global static_pdf_context
     if not os.path.exists(KNOWLEDGE_BASE_DIR):
         os.makedirs(KNOWLEDGE_BASE_DIR)
-        print(f"Created folder: {KNOWLEDGE_BASE_DIR}. Add your PDFs there!")
+        print(f"⚠️ Created '{KNOWLEDGE_BASE_DIR}' folder. Put your PDFs there!")
         return
 
     combined_text = ""
     for filename in os.listdir(KNOWLEDGE_BASE_DIR):
         if filename.endswith(".pdf"):
-            print(f"📖 Pre-loading: {filename}")
+            print(f"📖 Reading: {filename}...")
             path = os.path.join(KNOWLEDGE_BASE_DIR, filename)
-            reader = pypdf.PdfReader(path)
-            for page in reader.pages:
-                combined_text += page.extract_text() + "\n"
+            try:
+                reader = pypdf.PdfReader(path)
+                for page in reader.pages:
+                    text = page.extract_text()
+                    if text:
+                        combined_text += text + "\n"
+            except Exception as e:
+                print(f"❌ Could not read {filename}: {e}")
     
-    global_pdf_context = combined_text
-    print("✅ All PDFs loaded into memory.")
+    static_pdf_context = combined_text
+    print("✅ Knowledge Base Loaded.")
 
-# Load the PDFs right when the script starts
-load_static_pdfs()
-# --------------------------------
+# Run the loader once when the server starts
+load_all_pdfs()
 
-# Configure Gemini
+# --- GEMINI SETUP ---
 api_key = os.getenv("GEMINI_API_KEY")
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
@@ -48,11 +53,15 @@ def chat():
     data = request.json
     user_query = data.get('query')
     
-    # We combine the pre-loaded PDFs with any text sent from the browser
+    # We combine the folder text with any new text from the browser
     browser_context = data.get('context', "")
-    full_context = global_pdf_context + "\n" + browser_context
+    full_context = static_pdf_context + "\n" + browser_context
 
-    prompt = f"Use this knowledge to answer: {full_context}\n\nUser: {user_query}"
+    prompt = f"""
+    You are Bubloo Scientist. Answer the question using ONLY the provided context.
+    Context: {full_context}
+    Question: {user_query}
+    """
     
     try:
         response = model.generate_content(prompt)
