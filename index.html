@@ -2,77 +2,1361 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Bubloo Scientist Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubloo Scientist - AI Lab Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        body { font-family: sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        #chat-container { width: 400px; height: 500px; background: white; border-radius: 10px; display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        #messages { flex: 1; overflow-y: auto; padding: 20px; border-bottom: 1px solid #eee; }
-        .message { margin-bottom: 10px; padding: 8px 12px; border-radius: 15px; max-width: 80%; }
-        .bot { background: #e4e6eb; align-self: flex-start; }
-        .user { background: #0084ff; color: white; align-self: flex-end; margin-left: auto; }
-        #input-area { padding: 15px; display: flex; gap: 10px; }
-        input[type="text"] { flex: 1; border: 1px solid #ddd; border-radius: 20px; padding: 8px 15px; outline: none; }
-        button { background: #0084ff; color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; }
+        * {
+            font-family: 'Rajdhani', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1624 100%);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); opacity: 0.3; }
+            25% { transform: translate(100px, -100px) rotate(90deg); opacity: 0.6; }
+            50% { transform: translate(-50px, 100px) rotate(180deg); opacity: 0.3; }
+            75% { transform: translate(150px, 50px) rotate(270deg); opacity: 0.6; }
+        }
+
+        /* Cyber Glassmorphism */
+        .cyber-glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            box-shadow: 
+                0 8px 32px 0 rgba(0, 0, 0, 0.37),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .cyber-glass-strong {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(30px) saturate(200%);
+            -webkit-backdrop-filter: blur(30px) saturate(200%);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            box-shadow: 
+                0 8px 32px 0 rgba(56, 189, 248, 0.2),
+                inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+        }
+
+        /* Neon Glow Effects */
+        .neon-glow-blue {
+            box-shadow: 
+                0 0 5px rgba(56, 189, 248, 0.5),
+                0 0 10px rgba(56, 189, 248, 0.4),
+                0 0 20px rgba(56, 189, 248, 0.3),
+                0 0 40px rgba(56, 189, 248, 0.2);
+        }
+
+        .neon-glow-cyan {
+            box-shadow: 
+                0 0 5px rgba(34, 211, 238, 0.5),
+                0 0 10px rgba(34, 211, 238, 0.4),
+                0 0 20px rgba(34, 211, 238, 0.3),
+                0 0 40px rgba(34, 211, 238, 0.2);
+        }
+
+        .neon-glow-purple {
+            box-shadow: 
+                0 0 5px rgba(168, 85, 247, 0.5),
+                0 0 10px rgba(168, 85, 247, 0.4),
+                0 0 20px rgba(168, 85, 247, 0.3),
+                0 0 40px rgba(168, 85, 247, 0.2);
+        }
+
+        .text-neon-blue {
+            color: #38bdf8;
+            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+        }
+
+        .text-neon-cyan {
+            color: #22d3ee;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+
+        .text-neon-purple {
+            color: #a855f7;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+
+        /* Orbitron for titles */
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Chat Window Animations */
+        @keyframes slideUpCyber {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95) rotateX(-10deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotateX(0deg);
+            }
+        }
+
+        @keyframes slideDownCyber {
+            from {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotateX(0deg);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(50px) scale(0.95) rotateX(-10deg);
+            }
+        }
+
+        .chat-open {
+            animation: slideUpCyber 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .chat-close {
+            animation: slideDownCyber 0.4s cubic-bezier(0.4, 0, 1, 1) forwards;
+        }
+
+        /* Floating Button with Hologram Effect */
+        @keyframes floatHolo {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes rotateHolo {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .float-animation {
+            animation: floatHolo 3s ease-in-out infinite;
+        }
+
+        .rotate-slow {
+            animation: rotateHolo 20s linear infinite;
+        }
+
+        /* Pulse Ring Cyber */
+        @keyframes pulseCyber {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.8;
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.7);
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.5;
+                box-shadow: 0 0 0 20px rgba(56, 189, 248, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                opacity: 0.8;
+                box-shadow: 0 0 0 0 rgba(56, 189, 248, 0);
+            }
+        }
+
+        .pulse-cyber {
+            animation: pulseCyber 2s ease-in-out infinite;
+        }
+
+        /* Scanline Effect */
+        @keyframes scanline {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .scanline {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.8), transparent);
+            animation: scanline 4s linear infinite;
+            pointer-events: none;
+        }
+
+        /* Custom Scrollbar Cyber */
+        .chat-scroll::-webkit-scrollbar {
+            width: 10px;
+        }
+        .chat-scroll::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 10px;
+        }
+        .chat-scroll::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, rgba(56, 189, 248, 0.8), rgba(168, 85, 247, 0.8));
+            border-radius: 10px;
+            border: 2px solid rgba(15, 23, 42, 0.5);
+        }
+        .chat-scroll::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, rgba(56, 189, 248, 1), rgba(168, 85, 247, 1));
+        }
+
+        /* Message Animations */
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        .message-anim {
+            animation: messageSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        /* Typing Indicator Cyber */
+        .typing-dot {
+            animation: typingBounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typingBounce {
+            0%, 80%, 100% {
+                transform: scale(0.6) translateY(0);
+                opacity: 0.4;
+            }
+            40% {
+                transform: scale(1.3) translateY(-8px);
+                opacity: 1;
+            }
+        }
+
+        /* Button Hover Effects */
+        .cyber-button {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .cyber-button:hover::before {
+            left: 100%;
+        }
+
+        .cyber-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Quiz Mode Styles */
+        .quiz-option {
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .quiz-option:hover {
+            transform: translateX(10px);
+            border-color: rgba(56, 189, 248, 0.6);
+        }
+
+        .quiz-option.correct {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.8);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+        }
+
+        .quiz-option.wrong {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.8);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .quiz-option.disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        /* Input Glow Cyber */
+        .input-glow-cyber:focus-within {
+            border-color: rgba(56, 189, 248, 0.8);
+            box-shadow: 
+                0 0 5px rgba(56, 189, 248, 0.5),
+                0 0 15px rgba(56, 189, 248, 0.3),
+                0 0 30px rgba(56, 189, 248, 0.2);
+        }
+
+        /* Glitch Effect for Title */
+        @keyframes glitch {
+            0% {
+                text-shadow: 
+                    0.05em 0 0 rgba(255, 0, 0, 0.75),
+                    -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+                    0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            14% {
+                text-shadow: 
+                    0.05em 0 0 rgba(255, 0, 0, 0.75),
+                    -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+                    0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            15% {
+                text-shadow: 
+                    -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
+                    0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+                    -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            49% {
+                text-shadow: 
+                    -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
+                    0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+                    -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            50% {
+                text-shadow: 
+                    0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
+                    0.05em 0 0 rgba(0, 255, 0, 0.75),
+                    0 -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            99% {
+                text-shadow: 
+                    0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
+                    0.05em 0 0 rgba(0, 255, 0, 0.75),
+                    0 -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            100% {
+                text-shadow: 
+                    -0.025em 0 0 rgba(255, 0, 0, 0.75),
+                    -0.025em -0.025em 0 rgba(0, 255, 0, 0.75),
+                    -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+        }
+
+        .glitch-title {
+            animation: glitch 1s linear infinite;
+        }
+
+        /* Mode Toggle Animation */
+        @keyframes modeSwitch {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+
+        .mode-switch {
+            animation: modeSwitch 0.3s ease;
+        }
+
+        /* Quiz Score Badge */
+        .score-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Difficulty Badge Styles */
+        .difficulty-easy { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .difficulty-medium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .difficulty-hard { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+
+        /* Holographic Button Effect */
+        @keyframes holographic {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .holographic {
+            background: linear-gradient(45deg, #38bdf8, #a855f7, #ec4899, #38bdf8);
+            background-size: 300% 300%;
+            animation: holographic 3s ease infinite;
+        }
+
+        /* Maximized State */
+        .maximized {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            margin: 0 !important;
+            width: 100vw !important;
+            max-width: 100vw !important;
+            height: 100vh !important;
+            max-height: 100vh !important;
+            border-radius: 0 !important;
+            z-index: 9999 !important;
+        }
+
+        .maximized #chat-messages {
+            height: calc(100vh - 180px) !important;
+            max-height: none !important;
+        }
+
+        /* Delete Button on Messages */
+        .message-delete-btn {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .message-container:hover .message-delete-btn {
+            opacity: 1;
+        }
     </style>
 </head>
-<body>
-
-<div id="chat-container">
-    <div id="messages">
-        <div class="message bot">Hello! Upload a PDF to start.</div>
+<body class="relative">
+    <!-- Animated Background Particles -->
+    <div class="particles">
+        <div class="particle" style="width: 4px; height: 4px; background: #38bdf8; top: 20%; left: 10%; animation-delay: 0s; animation-duration: 12s;"></div>
+        <div class="particle" style="width: 6px; height: 6px; background: #a855f7; top: 40%; left: 80%; animation-delay: 2s; animation-duration: 15s;"></div>
+        <div class="particle" style="width: 3px; height: 3px; background: #22d3ee; top: 60%; left: 30%; animation-delay: 4s; animation-duration: 18s;"></div>
+        <div class="particle" style="width: 5px; height: 5px; background: #ec4899; top: 80%; left: 70%; animation-delay: 1s; animation-duration: 14s;"></div>
+        <div class="particle" style="width: 4px; height: 4px; background: #38bdf8; top: 30%; left: 50%; animation-delay: 3s; animation-duration: 16s;"></div>
+        <div class="particle" style="width: 7px; height: 7px; background: #a855f7; top: 70%; left: 20%; animation-delay: 5s; animation-duration: 13s;"></div>
     </div>
-    <div id="input-area">
-        <input type="file" id="pdf-upload" style="display:none" accept=".pdf">
-        <button onclick="document.getElementById('pdf-upload').click()">📎</button>
-        <input type="text" id="user-input" placeholder="Ask Bubloo...">
-        <button onclick="handleSend()">➔</button>
+
+    <!-- Main Chat Widget -->
+    <div id="chat-widget" class="fixed bottom-0 right-0 m-4 sm:m-6 z-50 hidden transition-all duration-300">
+        <div id="chat-container" class="cyber-glass-strong rounded-3xl shadow-2xl neon-glow-blue overflow-hidden transition-all duration-300" style="width: 95vw; max-width: 450px; height: 80vh; max-height: 700px;">
+            <!-- Scanline Effect -->
+            <div class="scanline"></div>
+            
+            <!-- Header -->
+            <div class="holographic p-4 relative">
+                <div class="flex items-center justify-between relative z-10">
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-white rounded-2xl blur-md opacity-50"></div>
+                            <div class="w-12 h-12 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center relative">
+                                <i class="fa-solid fa-flask text-white text-xl"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 class="text-white text-lg font-bold orbitron tracking-wider">LAB ASSISTANT</h3>
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 bg-green-400 rounded-full pulse-cyber"></div>
+                                <span id="status-text" class="text-white/80 text-xs font-semibold">ONLINE • AI POWERED</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <!-- Quiz Mode Toggle -->
+                        <button id="quiz-mode-btn" class="cyber-button w-10 h-10 bg-white/10 backdrop-blur-md hover:bg-white/20 rounded-xl flex items-center justify-center transition-all" title="Quiz Mode">
+                            <i class="fa-solid fa-graduation-cap text-white text-base"></i>
+                        </button>
+                        <!-- Clear Chat -->
+                        <button id="clear-chat" class="cyber-button w-10 h-10 bg-white/10 backdrop-blur-md hover:bg-white/20 rounded-xl flex items-center justify-center transition-all" title="Clear Chat">
+                            <i class="fa-solid fa-trash-can text-white text-base"></i>
+                        </button>
+                        <!-- Maximize/Restore -->
+                        <button id="maximize-btn" class="cyber-button w-10 h-10 bg-white/10 backdrop-blur-md hover:bg-white/20 rounded-xl flex items-center justify-center transition-all" title="Maximize">
+                            <i class="fa-solid fa-expand text-white text-base"></i>
+                        </button>
+                        <!-- Minimize -->
+                        <button id="minimize-btn" class="cyber-button w-10 h-10 bg-white/10 backdrop-blur-md hover:bg-white/20 rounded-xl flex items-center justify-center transition-all" title="Minimize">
+                            <i class="fa-solid fa-chevron-down text-white text-base"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mode Indicator -->
+            <div id="mode-indicator" class="hidden px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-center">
+                <div class="flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span class="font-bold text-sm orbitron">QUIZ MODE ACTIVATED</span>
+                </div>
+            </div>
+
+            <!-- Chat Messages -->
+            <div id="chat-messages" class="chat-scroll overflow-y-auto p-4 space-y-4" style="height: calc(80vh - 180px); max-height: 520px; background: rgba(10, 14, 39, 0.5);">
+                <!-- Messages will appear here -->
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 border-t border-white/10 bg-gradient-to-b from-transparent to-black/30">
+                <div class="flex gap-3">
+                    <div class="flex-1 cyber-glass rounded-2xl overflow-hidden input-glow-cyber transition-all">
+                        <input 
+                            type="text" 
+                            id="user-input" 
+                            placeholder="Ask anything about science..." 
+                            class="w-full px-4 py-3 bg-transparent text-white placeholder-gray-400 outline-none text-base"
+                            autocomplete="off"
+                        />
+                    </div>
+                    <button id="send-btn" class="cyber-button holographic w-12 h-12 rounded-2xl flex items-center justify-center transition-all neon-glow-cyan">
+                        <i class="fa-solid fa-paper-plane text-white text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
 
-<script>
-    let pdfContext = "";
+    <!-- Floating Chat Button -->
+    <button id="chat-button" class="fixed bottom-6 right-6 z-40 group">
+        <div class="relative">
+            <!-- Outer Glow Ring -->
+            <div class="absolute inset-0 rounded-full neon-glow-blue rotate-slow" style="transform-origin: center;"></div>
+            
+            <!-- Main Button -->
+            <div class="relative w-16 h-16 sm:w-20 sm:h-20 holographic rounded-full flex items-center justify-center float-animation shadow-2xl">
+                <i id="bot-icon" class="fa-solid fa-flask text-white text-2xl sm:text-3xl"></i>
+            </div>
+            
+            <!-- Notification Badge -->
+            <div class="absolute -top-1 -right-1 w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg pulse-cyber">
+                AI
+            </div>
+        </div>
+    </button>
 
-    document.getElementById('pdf-upload').addEventListener('change', async (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
+    <script>
+        // Configuration
+        const CONFIG = {
+            API_URL: 'http://localhost:3000/api/chat',
+            TYPING_DELAY: { min: 500, max: 1500 },
+            QUIZ_API_URL: 'http://localhost:3000/api/quiz' // For future quiz endpoint
+        };
 
-        addMessage("Uploading PDF...", 'bot');
-        const formData = new FormData();
-        formData.append('file', file);
+        // DOM Elements
+        const $ = id => document.getElementById(id);
+        const chatWidget = $('chat-widget');
+        const chatButton = $('chat-button');
+        const chatMessages = $('chat-messages');
+        const userInput = $('user-input');
+        const sendBtn = $('send-btn');
+        const minimizeBtn = $('minimize-btn');
+        const maximizeBtn = $('maximize-btn');
+        const clearChatBtn = $('clear-chat');
+        const botIcon = $('bot-icon');
+        const statusText = $('status-text');
+        const quizModeBtn = $('quiz-mode-btn');
+        const modeIndicator = $('mode-indicator');
+        const chatContainer = $('chat-container');
 
-        const response = await fetch('http://127.0.0.1:5000/upload', {
-            method: 'POST',
-            body: formData
+        // State
+        let isChatOpen = false;
+        let isProcessing = false;
+        let conversationHistory = [];
+        let isQuizMode = false;
+        let currentQuiz = null;
+        let isMaximized = false;
+        let messageIdCounter = 0;
+
+        // --- Toggle Chat ---
+        function toggleChat() {
+            const container = $('chat-container');
+
+            if (!isChatOpen) {
+                chatWidget.classList.remove('hidden');
+                container.classList.remove('chat-close');
+                container.classList.add('chat-open');
+
+                botIcon.classList.add('fa-times');
+                botIcon.classList.remove('fa-flask');
+
+                if (chatMessages.children.length === 0) {
+                    showWelcomeMessage();
+                }
+
+                setTimeout(() => userInput.focus(), 400);
+                isChatOpen = true;
+            } else {
+                container.classList.remove('chat-open');
+                container.classList.add('chat-close');
+
+                botIcon.classList.remove('fa-times');
+                botIcon.classList.add('fa-flask');
+
+                setTimeout(() => {
+                    chatWidget.classList.add('hidden');
+                }, 400);
+
+                isChatOpen = false;
+            }
+        }
+
+        chatButton.addEventListener('click', toggleChat);
+        minimizeBtn.addEventListener('click', toggleChat);
+
+        // --- Maximize/Restore Toggle ---
+        maximizeBtn.addEventListener('click', () => {
+            isMaximized = !isMaximized;
+            const icon = maximizeBtn.querySelector('i');
+            
+            if (isMaximized) {
+                chatContainer.classList.add('maximized');
+                icon.classList.remove('fa-expand');
+                icon.classList.add('fa-compress');
+                maximizeBtn.title = 'Restore';
+            } else {
+                chatContainer.classList.remove('maximized');
+                icon.classList.remove('fa-compress');
+                icon.classList.add('fa-expand');
+                maximizeBtn.title = 'Maximize';
+            }
         });
-        const data = await response.json();
-        pdfContext = data.text;
-        addMessage(`✅ Loaded: ${file.name}`, 'bot');
-    });
 
-    async function handleSend() {
-        const input = document.getElementById('user-input');
-        const msg = input.value;
-        if (!msg) return;
-
-        addMessage(msg, 'user');
-        input.value = '';
-
-        const response = await fetch('http://127.0.0.1:5000/chat', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ query: msg, context: pdfContext })
+        // --- Quiz Mode Toggle ---
+        quizModeBtn.addEventListener('click', () => {
+            isQuizMode = !isQuizMode;
+            quizModeBtn.classList.add('mode-switch');
+            
+            if (isQuizMode) {
+                modeIndicator.classList.remove('hidden');
+                quizModeBtn.style.background = 'rgba(168, 85, 247, 0.5)';
+                showQuizWelcome();
+            } else {
+                modeIndicator.classList.add('hidden');
+                quizModeBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+            }
+            
+            setTimeout(() => quizModeBtn.classList.remove('mode-switch'), 300);
         });
-        const data = await response.json();
-        addMessage(data.response || data.error, 'bot');
-    }
 
-    function addMessage(text, type) {
-        const div = document.createElement('div');
-        div.className = `message ${type}`;
-        div.innerText = text;
-        document.getElementById('messages').appendChild(div);
-        document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
-    }
-</script>
+        // --- Clear Chat ---
+        clearChatBtn.addEventListener('click', () => {
+            if (confirm('Clear all messages?')) {
+                chatMessages.innerHTML = '';
+                conversationHistory = [];
+                currentQuiz = null;
+                if (isQuizMode) {
+                    showQuizWelcome();
+                } else {
+                    showWelcomeMessage();
+                }
+            }
+        });
+
+        // --- Welcome Message ---
+        function showWelcomeMessage() {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="inline-flex items-center justify-center w-24 h-24 holographic rounded-3xl mb-6 shadow-2xl">
+                        <i class="fa-solid fa-flask text-white text-4xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-neon-cyan mb-3 orbitron tracking-wider glitch-title">WELCOME TO LAB ASSISTANT!</h3>
+                    <p class="text-lg text-gray-300 mb-6 px-6 leading-relaxed">I'm your AI-powered science companion. Ask me anything about physics, chemistry, biology, and more!</p>
+                    <div class="flex flex-wrap gap-3 justify-center px-6">
+                        <button onclick="askSample('What is quantum physics?')" class="cyber-button cyber-glass px-6 py-3 text-cyan-400 text-sm font-bold rounded-2xl transition-all hover:scale-105 neon-glow-cyan">
+                            <i class="fa-solid fa-atom mr-2"></i>Quantum Physics
+                        </button>
+                        <button onclick="askSample('Explain photosynthesis')" class="cyber-button cyber-glass px-6 py-3 text-purple-400 text-sm font-bold rounded-2xl transition-all hover:scale-105 neon-glow-purple">
+                            <i class="fa-solid fa-leaf mr-2"></i>Photosynthesis
+                        </button>
+                        <button onclick="askSample('What is DNA?')" class="cyber-button cyber-glass px-6 py-3 text-blue-400 text-sm font-bold rounded-2xl transition-all hover:scale-105 neon-glow-blue">
+                            <i class="fa-solid fa-dna mr-2"></i>DNA Structure
+                        </button>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(div);
+        }
+
+        // --- Quiz Welcome Message ---
+        function showQuizWelcome() {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br from-purple-600 to-pink-600 rounded-3xl mb-6 shadow-2xl neon-glow-purple">
+                        <i class="fa-solid fa-graduation-cap text-white text-4xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold text-neon-purple mb-3 orbitron tracking-wider">QUIZ MODE ACTIVATED!</h3>
+                    <p class="text-lg text-gray-300 mb-6 px-6 leading-relaxed">Test your knowledge! Choose a topic and difficulty:</p>
+                    
+                    <!-- Topic Selection -->
+                    <div class="mb-6 px-6">
+                        <label class="block text-cyan-400 font-bold mb-3 text-sm uppercase tracking-wider">Select Topic Category:</label>
+                        <select id="quiz-topic-select" class="w-full max-w-sm mx-auto cyber-glass rounded-xl px-4 py-3 text-white bg-transparent border border-cyan-500/50 focus:border-cyan-400 outline-none cursor-pointer">
+                            <option value="random" class="bg-slate-800">🎲 Random Topic</option>
+                            <optgroup label="🔬 Science" class="bg-slate-800">
+                                <option value="physics">⚛️ Physics</option>
+                                <option value="chemistry">🧪 Chemistry</option>
+                                <option value="biology">🧬 Biology</option>
+                                <option value="astronomy">🌌 Astronomy</option>
+                                <option value="modern-science">🚀 Modern Science</option>
+                            </optgroup>
+                            <optgroup label="🌍 Geography & History" class="bg-slate-800">
+                                <option value="geography">🗺️ Geography</option>
+                                <option value="world-history">📜 World History</option>
+                                <option value="modern-history">📰 Modern History</option>
+                                <option value="discoveries">🔍 Modern Discoveries</option>
+                            </optgroup>
+                            <optgroup label="⚽ Sports" class="bg-slate-800">
+                                <option value="sports-general">🏆 General Sports</option>
+                                <option value="olympics">🥇 Olympics</option>
+                                <option value="football">⚽ Football/Soccer</option>
+                                <option value="cricket">🏏 Cricket</option>
+                            </optgroup>
+                            <optgroup label="🎯 Other" class="bg-slate-800">
+                                <option value="technology">💻 Technology</option>
+                                <option value="space-exploration">🛸 Space Exploration</option>
+                                <option value="inventions">💡 Inventions</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    
+                    <div class="flex flex-col gap-3 px-6 max-w-sm mx-auto">
+                        <button onclick="startQuizWithSelection('easy')" class="cyber-button difficulty-easy px-6 py-4 text-white text-base font-bold rounded-2xl transition-all hover:scale-105 shadow-xl">
+                            <i class="fa-solid fa-star mr-2"></i>EASY - 5 Questions
+                        </button>
+                        <button onclick="startQuizWithSelection('medium')" class="cyber-button difficulty-medium px-6 py-4 text-white text-base font-bold rounded-2xl transition-all hover:scale-105 shadow-xl">
+                            <i class="fa-solid fa-star mr-2"></i><i class="fa-solid fa-star mr-2"></i>MEDIUM - 5 Questions
+                        </button>
+                        <button onclick="startQuizWithSelection('hard')" class="cyber-button difficulty-hard px-6 py-4 text-white text-base font-bold rounded-2xl transition-all hover:scale-105 shadow-xl">
+                            <i class="fa-solid fa-star mr-2"></i><i class="fa-solid fa-star mr-2"></i><i class="fa-solid fa-star mr-2"></i>HARD - 5 Questions
+                        </button>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(div);
+        }
+
+        // --- Start Quiz with Topic Selection ---
+        window.startQuizWithSelection = async function(difficulty) {
+            const topicSelect = document.getElementById('quiz-topic-select');
+            const selectedTopic = topicSelect ? topicSelect.value : 'random';
+            
+            // Initialize quiz session
+            if (!currentQuiz || !currentQuiz.session) {
+                currentQuiz = {
+                    session: {
+                        difficulty: difficulty,
+                        topic: selectedTopic,
+                        totalQuestions: 5,
+                        currentQuestion: 1,
+                        score: 0,
+                        questions: []
+                    }
+                };
+            }
+            
+            startQuiz(difficulty, selectedTopic);
+        };
+
+        // --- Start Quiz ---
+        window.startQuiz = async function(difficulty, topic = 'random') {
+            const difficultyLabels = {
+                easy: 'Easy',
+                medium: 'Medium',
+                hard: 'Hard'
+            };
+
+            // Show current progress if in session
+            const progressText = currentQuiz?.session ? 
+                `Question ${currentQuiz.session.currentQuestion}/${currentQuiz.session.totalQuestions}` : 
+                'Starting quiz...';
+
+            addMessage(`${progressText} - ${difficultyLabels[difficulty]} difficulty${topic !== 'random' ? ` - ${formatTopicName(topic)}` : ''}`, 'user');
+            showTypingIndicator('Generating quiz...');
+
+            // Request quiz from AI with topic
+            const topicPrompt = topic === 'random' ? 
+                'a random science, geography, history, or sports topic' : 
+                `specifically about ${formatTopicName(topic)}`;
+
+            const prompt = `Generate a multiple-choice quiz question with ${difficulty} difficulty on ${topicPrompt}. 
+
+Format your response EXACTLY like this:
+QUESTION: [Your question here]
+A) [Option A]
+B) [Option B]
+C) [Option C]
+D) [Option D]
+CORRECT: [A, B, C, or D]
+EXPLANATION: [Brief explanation of the correct answer]
+
+Topic guidelines:
+- If physics/chemistry/biology/astronomy: Focus on scientific concepts
+- If geography: Focus on countries, capitals, landmarks, climate, physical features
+- If history: Focus on historical events, dates, famous figures, civilizations
+- If modern-science/discoveries: Focus on recent breakthroughs (2000s-2020s)
+- If sports: Focus on famous athletes, records, tournaments, rules, history
+- If technology: Focus on inventions, innovations, digital era
+- If space-exploration: Focus on missions, discoveries, astronauts
+
+Make it ${difficulty} level and engaging!`;
+
+            try {
+                const response = await fetch(CONFIG.API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: prompt,
+                        history: []
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to generate quiz');
+
+                const data = await response.json();
+                removeTypingIndicator();
+
+                // Parse the quiz response
+                const quizData = parseQuizResponse(data.response);
+                if (quizData) {
+                    // Store question in session
+                    if (currentQuiz?.session) {
+                        currentQuiz.session.questions.push(quizData);
+                    }
+                    displayQuizQuestion(quizData, difficulty);
+                } else {
+                    addMessage('Sorry, I had trouble generating the quiz. Please try again!', 'bot');
+                }
+            } catch (error) {
+                removeTypingIndicator();
+                addMessage('Error generating quiz. Please check your connection and try again.', 'bot');
+            }
+        };
+
+        // --- Format Topic Name ---
+        function formatTopicName(topic) {
+            const topicNames = {
+                'random': 'Random Topic',
+                'physics': 'Physics',
+                'chemistry': 'Chemistry',
+                'biology': 'Biology',
+                'astronomy': 'Astronomy',
+                'modern-science': 'Modern Science & Discoveries',
+                'geography': 'Geography',
+                'world-history': 'World History',
+                'modern-history': 'Modern History',
+                'discoveries': 'Modern Discoveries',
+                'sports-general': 'General Sports',
+                'olympics': 'Olympics',
+                'football': 'Football/Soccer',
+                'cricket': 'Cricket',
+                'technology': 'Technology',
+                'space-exploration': 'Space Exploration',
+                'inventions': 'Inventions & Innovations'
+            };
+            return topicNames[topic] || topic;
+        }
+
+        // --- Parse Quiz Response ---
+        function parseQuizResponse(text) {
+            try {
+                const lines = text.split('\n').filter(line => line.trim());
+                const quiz = {
+                    question: '',
+                    options: [],
+                    correct: '',
+                    explanation: ''
+                };
+
+                let currentSection = '';
+
+                for (const line of lines) {
+                    if (line.startsWith('QUESTION:')) {
+                        quiz.question = line.replace('QUESTION:', '').trim();
+                        currentSection = 'question';
+                    } else if (line.match(/^[A-D]\)/)) {
+                        quiz.options.push({
+                            letter: line[0],
+                            text: line.substring(2).trim()
+                        });
+                        currentSection = 'options';
+                    } else if (line.startsWith('CORRECT:')) {
+                        quiz.correct = line.replace('CORRECT:', '').trim().toUpperCase()[0];
+                        currentSection = 'correct';
+                    } else if (line.startsWith('EXPLANATION:')) {
+                        quiz.explanation = line.replace('EXPLANATION:', '').trim();
+                        currentSection = 'explanation';
+                    } else if (currentSection === 'question' && line.trim()) {
+                        quiz.question += ' ' + line.trim();
+                    } else if (currentSection === 'explanation' && line.trim()) {
+                        quiz.explanation += ' ' + line.trim();
+                    }
+                }
+
+                if (quiz.question && quiz.options.length === 4 && quiz.correct && quiz.explanation) {
+                    return quiz;
+                }
+                return null;
+            } catch (error) {
+                console.error('Error parsing quiz:', error);
+                return null;
+            }
+        }
+
+        // --- Display Quiz Question ---
+        function displayQuizQuestion(quiz, difficulty) {
+            currentQuiz = quiz;
+            
+            const difficultyColors = {
+                easy: 'from-green-500 to-emerald-600',
+                medium: 'from-yellow-500 to-orange-600',
+                hard: 'from-red-500 to-rose-600'
+            };
+
+            const div = document.createElement('div');
+            div.className = 'message-anim';
+            div.innerHTML = `
+                <div class="cyber-glass-strong rounded-2xl p-6 border-2 border-purple-500/50">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br ${difficultyColors[difficulty]} rounded-2xl flex items-center justify-center shadow-lg">
+                            <i class="fa-solid fa-question text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs text-gray-400 uppercase tracking-wider font-bold">Quiz Question</span>
+                            <div class="flex items-center gap-2 mt-1">
+                                <span class="text-xs px-3 py-1 bg-gradient-to-r ${difficultyColors[difficulty]} text-white rounded-full font-bold uppercase">${difficulty}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-white text-lg font-semibold mb-4 leading-relaxed">${quiz.question}</p>
+                    
+                    <div class="space-y-3">
+                        ${quiz.options.map(opt => `
+                            <div class="quiz-option cyber-glass rounded-xl p-4 border border-white/20 hover:border-cyan-400/60 transition-all cursor-pointer" 
+                                 onclick="selectQuizAnswer('${opt.letter}')">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                                        ${opt.letter}
+                                    </div>
+                                    <span class="text-white text-base font-medium">${opt.text}</span>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <button onclick="showQuizExplanation()" class="text-cyan-400 text-sm font-bold hover:text-cyan-300 transition-colors">
+                            <i class="fa-solid fa-lightbulb mr-2"></i>Skip & Show Answer
+                        </button>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // --- Select Quiz Answer ---
+        window.selectQuizAnswer = function(selected) {
+            if (!currentQuiz) return;
+
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.classList.add('disabled'));
+
+            const selectedOption = Array.from(options).find(opt => 
+                opt.textContent.trim().startsWith(selected)
+            );
+
+            const isCorrect = selected === currentQuiz.correct;
+
+            if (isCorrect) {
+                selectedOption.classList.add('correct');
+                setTimeout(() => {
+                    showQuizResult(true);
+                }, 1000);
+            } else {
+                selectedOption.classList.add('wrong');
+                const correctOption = Array.from(options).find(opt => 
+                    opt.textContent.trim().startsWith(currentQuiz.correct)
+                );
+                setTimeout(() => {
+                    correctOption.classList.add('correct');
+                }, 500);
+                setTimeout(() => {
+                    showQuizResult(false);
+                }, 2000);
+            }
+        };
+
+        // --- Show Quiz Result ---
+        function showQuizResult(isCorrect) {
+            // Update score
+            if (currentQuiz?.session && isCorrect) {
+                currentQuiz.session.score++;
+            }
+
+            const div = document.createElement('div');
+            div.className = 'message-anim mt-4';
+            
+            const resultClass = isCorrect ? 'from-green-500 to-emerald-600' : 'from-red-500 to-rose-600';
+            const resultIcon = isCorrect ? 'fa-check-circle' : 'fa-times-circle';
+            const resultText = isCorrect ? 'Correct!' : 'Incorrect!';
+            
+            // Check if this is the last question
+            const isLastQuestion = currentQuiz?.session && 
+                currentQuiz.session.currentQuestion >= currentQuiz.session.totalQuestions;
+            
+            const scoreText = currentQuiz?.session ? 
+                `Score: ${currentQuiz.session.score}/${currentQuiz.session.currentQuestion}` : '';
+            
+            div.innerHTML = `
+                <div class="cyber-glass-strong rounded-2xl p-6 border-2 border-${isCorrect ? 'green' : 'red'}-500/50">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-gradient-to-br ${resultClass} rounded-2xl flex items-center justify-center shadow-lg">
+                            <i class="fa-solid ${resultIcon} text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-2xl font-bold text-${isCorrect ? 'green' : 'red'}-400 orbitron">${resultText}</span>
+                            ${scoreText ? `<p class="text-cyan-400 text-sm font-bold mt-1">${scoreText}</p>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                        <p class="text-sm text-gray-400 font-bold mb-2 uppercase tracking-wider">Explanation:</p>
+                        <p class="text-white text-base leading-relaxed">${currentQuiz.explanation}</p>
+                    </div>
+                    
+                    ${isLastQuestion ? `
+                        <div class="mt-4 p-4 bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-xl border border-purple-500/50">
+                            <p class="text-center text-xl font-bold text-purple-400 mb-2 orbitron">QUIZ COMPLETE!</p>
+                            <p class="text-center text-3xl font-bold text-cyan-400 orbitron">
+                                ${currentQuiz.session.score}/${currentQuiz.session.totalQuestions}
+                            </p>
+                            <p class="text-center text-sm text-gray-300 mt-2">
+                                ${getScoreMessage(currentQuiz.session.score, currentQuiz.session.totalQuestions)}
+                            </p>
+                        </div>
+                        <div class="flex gap-3 mt-4">
+                            <button onclick="restartQuiz()" class="flex-1 cyber-button bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold hover:scale-105 transition-all">
+                                <i class="fa-solid fa-rotate-right mr-2"></i>New Quiz
+                            </button>
+                            <button onclick="exitQuizMode()" class="flex-1 cyber-button cyber-glass text-cyan-400 py-3 rounded-xl font-bold hover:scale-105 transition-all">
+                                <i class="fa-solid fa-door-open mr-2"></i>Exit
+                            </button>
+                        </div>
+                    ` : `
+                        <div class="flex gap-3 mt-4">
+                            <button onclick="continueQuiz()" class="flex-1 cyber-button bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold hover:scale-105 transition-all">
+                                <i class="fa-solid fa-forward mr-2"></i>Next Question
+                            </button>
+                            <button onclick="exitQuizMode()" class="flex-1 cyber-button cyber-glass text-cyan-400 py-3 rounded-xl font-bold hover:scale-105 transition-all">
+                                <i class="fa-solid fa-door-open mr-2"></i>Exit Quiz
+                            </button>
+                        </div>
+                    `}
+                </div>
+            `;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // --- Continue Quiz (Next Question) ---
+        window.continueQuiz = function() {
+            if (currentQuiz?.session) {
+                currentQuiz.session.currentQuestion++;
+                startQuiz(currentQuiz.session.difficulty, currentQuiz.session.topic);
+            }
+        };
+
+        // --- Restart Quiz ---
+        window.restartQuiz = function() {
+            currentQuiz = null;
+            showQuizWelcome();
+        };
+
+        // --- Get Score Message ---
+        function getScoreMessage(score, total) {
+            const percentage = (score / total) * 100;
+            if (percentage === 100) return '🏆 Perfect Score! Absolutely Outstanding!';
+            if (percentage >= 80) return '🌟 Excellent! Great knowledge!';
+            if (percentage >= 60) return '👍 Good job! Keep learning!';
+            if (percentage >= 40) return '📚 Not bad! Room for improvement!';
+            return '💪 Keep practicing! You\'ll improve!';
+        }
+
+        // --- Show Quiz Explanation (Skip) ---
+        window.showQuizExplanation = function() {
+            if (!currentQuiz) return;
+            
+            const options = document.querySelectorAll('.quiz-option');
+            options.forEach(opt => opt.classList.add('disabled'));
+            
+            const correctOption = Array.from(options).find(opt => 
+                opt.textContent.trim().startsWith(currentQuiz.correct)
+            );
+            correctOption.classList.add('correct');
+            
+            setTimeout(() => {
+                const div = document.createElement('div');
+                div.className = 'message-anim mt-4';
+                div.innerHTML = `
+                    <div class="cyber-glass-strong rounded-2xl p-6 border-2 border-yellow-500/50">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg">
+                                <i class="fa-solid fa-lightbulb text-white text-xl"></i>
+                            </div>
+                            <span class="text-2xl font-bold text-yellow-400 orbitron">Answer Revealed</span>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/10 mb-4">
+                            <p class="text-sm text-gray-400 font-bold mb-2 uppercase tracking-wider">Correct Answer:</p>
+                            <p class="text-white text-lg font-semibold">${currentQuiz.correct}) ${currentQuiz.options.find(o => o.letter === currentQuiz.correct).text}</p>
+                        </div>
+                        
+                        <div class="bg-white/5 rounded-xl p-4 border border-white/10">
+                            <p class="text-sm text-gray-400 font-bold mb-2 uppercase tracking-wider">Explanation:</p>
+                            <p class="text-white text-base leading-relaxed">${currentQuiz.explanation}</p>
+                        </div>
+                        
+                        <div class="flex gap-3 mt-4">
+                            <button onclick="startQuiz('${getCurrentDifficulty()}')" class="flex-1 cyber-button bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-bold hover:scale-105 transition-all">
+                                <i class="fa-solid fa-rotate mr-2"></i>Next Question
+                            </button>
+                            <button onclick="exitQuizMode()" class="flex-1 cyber-button cyber-glass text-cyan-400 py-3 rounded-xl font-bold hover:scale-105 transition-all">
+                                <i class="fa-solid fa-door-open mr-2"></i>Exit Quiz
+                            </button>
+                        </div>
+                    </div>
+                `;
+                chatMessages.appendChild(div);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+        };
+
+        // --- Helper Functions ---
+        function getCurrentDifficulty() {
+            // Try to detect from last quiz
+            const lastDifficulty = document.querySelector('.quiz-option');
+            if (lastDifficulty) {
+                const badge = lastDifficulty.closest('.cyber-glass-strong')?.querySelector('[class*="difficulty"]');
+                if (badge) {
+                    if (badge.textContent.includes('EASY')) return 'easy';
+                    if (badge.textContent.includes('MEDIUM')) return 'medium';
+                    if (badge.textContent.includes('HARD')) return 'hard';
+                }
+            }
+            return 'medium'; // Default
+        }
+
+        window.exitQuizMode = function() {
+            isQuizMode = false;
+            modeIndicator.classList.add('hidden');
+            quizModeBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+            currentQuiz = null;
+            
+            addMessage('Exited quiz mode. Back to normal chat!', 'bot');
+        };
+
+        // Sample question handler
+        window.askSample = function(question) {
+            userInput.value = question;
+            handleUserMessage();
+        };
+
+        // --- Message Functions ---
+        function addMessage(text, sender) {
+            const messageId = `msg-${messageIdCounter++}`;
+            const div = document.createElement('div');
+            const isBot = sender === 'bot';
+            const time = new Date().toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+
+            div.className = `flex w-full ${isBot ? 'justify-start' : 'justify-end'} message-anim message-container`;
+            div.id = messageId;
+            div.innerHTML = `
+                <div class="flex max-w-[85%] ${isBot ? 'flex-row' : 'flex-row-reverse'} items-end gap-3">
+                    <div class="w-10 h-10 rounded-2xl ${isBot ? 'bg-gradient-to-br from-cyan-500 to-blue-600' : 'bg-gradient-to-br from-gray-500 to-gray-700'} flex items-center justify-center text-white flex-shrink-0 shadow-lg ${isBot ? 'neon-glow-cyan' : ''}">
+                        <i class="fa-solid fa-${isBot ? 'robot' : 'user'} text-base"></i>
+                    </div>
+                    <div class="flex flex-col ${isBot ? 'items-start' : 'items-end'} flex-1">
+                        <div class="relative group w-full">
+                            <div class="${isBot ? 'cyber-glass-strong text-white shadow-lg' : 'bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-xl'} px-5 py-3.5 rounded-2xl ${isBot ? 'rounded-tl-md' : 'rounded-tr-md'} text-base leading-relaxed">
+                                ${text}
+                            </div>
+                            ${isBot ? `
+                                <button onclick="deleteMessage('${messageId}')" class="message-delete-btn absolute top-2 right-2 w-6 h-6 bg-red-500/80 hover:bg-red-600 rounded-lg flex items-center justify-center transition-all" title="Delete">
+                                    <i class="fa-solid fa-trash text-white text-xs"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                        <span class="text-xs text-gray-500 mt-2 px-2 font-medium">${time}</span>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            if (!isQuizMode || sender === 'user') {
+                conversationHistory.push({
+                    role: isBot ? 'model' : 'user',
+                    parts: [{ text: text.replace(/<[^>]*>/g, '') }],
+                    messageId: messageId
+                });
+            }
+        }
+
+        // --- Delete Message ---
+        window.deleteMessage = function(messageId) {
+            const messageElement = document.getElementById(messageId);
+            if (messageElement) {
+                // Add fade out animation
+                messageElement.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                messageElement.style.opacity = '0';
+                messageElement.style.transform = 'scale(0.9)';
+                
+                setTimeout(() => {
+                    messageElement.remove();
+                    
+                    // Remove from conversation history
+                    const index = conversationHistory.findIndex(msg => msg.messageId === messageId);
+                    if (index !== -1) {
+                        conversationHistory.splice(index, 1);
+                    }
+                }, 300);
+            }
+        };
+
+        function showTypingIndicator(text = 'Thinking...') {
+            const div = document.createElement('div');
+            div.id = 'typing-indicator';
+            div.className = 'flex w-full justify-start message-anim';
+            div.innerHTML = `
+                <div class="flex max-w-[85%] flex-row items-end gap-3">
+                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-white flex-shrink-0 shadow-lg pulse-cyber neon-glow-cyan">
+                        <i class="fa-solid fa-robot text-base"></i>
+                    </div>
+                    <div class="cyber-glass-strong shadow-lg px-6 py-4 rounded-2xl rounded-tl-md">
+                        <div class="flex items-center gap-3">
+                            <div class="flex space-x-2">
+                                <div class="w-3 h-3 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full typing-dot"></div>
+                                <div class="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full typing-dot"></div>
+                                <div class="w-3 h-3 bg-gradient-to-r from-purple-500 to-cyan-400 rounded-full typing-dot"></div>
+                            </div>
+                            <span class="text-sm text-gray-300 font-semibold">${text}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(div);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const ind = $('typing-indicator');
+            if (ind) ind.remove();
+        }
+
+        // --- AI Response Handler ---
+        async function getAIResponse(userMessage) {
+            try {
+                statusText.textContent = 'PROCESSING...';
+
+                const response = await fetch(CONFIG.API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: userMessage,
+                        history: conversationHistory.slice(0, -1)
+                    })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    throw new Error(err.error || `Server error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                statusText.textContent = 'ONLINE • AI POWERED';
+
+                return data.response || "I couldn't generate a response. Please try again.";
+
+            } catch (error) {
+                console.error('AI Error:', error);
+                statusText.textContent = 'ONLINE • AI POWERED';
+
+                if (error.message.includes('Failed to fetch')) {
+                    return `❌ Cannot connect to server at ${CONFIG.API_URL}. Make sure backend is running!`;
+                }
+
+                return `I encountered an error: ${error.message}. Please try again.`;
+            }
+        }
+
+        // --- Handle User Input ---
+        async function handleUserMessage() {
+            const text = userInput.value.trim();
+            if (!text || isProcessing) return;
+
+            isProcessing = true;
+            sendBtn.disabled = true;
+
+            // Check if in quiz mode and user wants to start quiz
+            if (isQuizMode && (text.toLowerCase().includes('quiz') || text.toLowerCase().includes('question'))) {
+                // Detect difficulty
+                let difficulty = 'medium';
+                if (text.toLowerCase().includes('easy')) difficulty = 'easy';
+                if (text.toLowerCase().includes('hard')) difficulty = 'hard';
+                
+                userInput.value = '';
+                await startQuiz(difficulty);
+                isProcessing = false;
+                sendBtn.disabled = false;
+                return;
+            }
+
+            addMessage(text, 'user');
+            userInput.value = '';
+
+            showTypingIndicator();
+
+            await new Promise(r => setTimeout(r, CONFIG.TYPING_DELAY.min + Math.random() * (CONFIG.TYPING_DELAY.max - CONFIG.TYPING_DELAY.min)));
+
+            const response = await getAIResponse(text);
+
+            removeTypingIndicator();
+            addMessage(response, 'bot');
+
+            isProcessing = false;
+            sendBtn.disabled = false;
+            userInput.focus();
+        }
+
+        // --- Event Listeners ---
+        sendBtn.addEventListener('click', handleUserMessage);
+        userInput.addEventListener('keypress', e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleUserMessage();
+            }
+        });
+
+        // --- Initialization ---
+        window.addEventListener('load', () => {
+            console.log('🤖 Lab Assistant initialized');
+            console.log('🔒 API URL:', CONFIG.API_URL);
+            console.log('🎮 Quiz Mode Available');
+        });
+    </script>
 </body>
 </html>
